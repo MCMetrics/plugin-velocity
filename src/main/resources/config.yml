@@ -1,0 +1,15 @@
+#
+# Server ID and UID can be configured automatically using /mcmetrics setup.
+# KEEP THESE VALUES SECRET!
+# More information: https://docs.mcmetrics.net/quickstart
+#
+server_id: ""
+uid: ""
+
+# Should the plugin send anonymous usage data to BStats? This helps us track plugin usage across servers.
+# This option needs a restart to take effect.
+enable-bstats: true
+
+# Should the plugin send anonymous error reports to Sentry? This helps us track and fix plugin errors.
+# This option needs a restart to take effect.
+enable-sentry: false
