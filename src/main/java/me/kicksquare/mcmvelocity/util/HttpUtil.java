@@ -99,8 +99,8 @@ public class HttpUtil {
 
     public static String[][] getAuthHeadersFromConfig() {
         return new String[][]{
-                {"user_id", plugin.getConfig().getString("uid")},
-                {"server_id", plugin.getConfig().getString("server_id")}
+                {"user_id", plugin.getMainConfig().getString("uid")},
+                {"server_id", plugin.getMainConfig().getString("server_id")}
         };
     }
 }

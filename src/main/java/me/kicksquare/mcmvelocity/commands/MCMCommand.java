@@ -21,7 +21,7 @@ public class MCMCommand implements SimpleCommand {
 
     public static CompletableFuture<Boolean> reloadConfigAndFetchData() {
         return CompletableFuture.supplyAsync(() -> {
-            staticPlugin.getConfig().forceReload();
+            staticPlugin.getMainConfig().forceReload();
 
             if (SetupUtil.isSetup()) {
                 TaskList.fetchTasks();
@@ -40,7 +40,7 @@ public class MCMCommand implements SimpleCommand {
                 reloadConfigAndFetchData().thenAccept((result) -> {
                     if (result) {
                         invocation.source().sendMessage(mm.deserialize("<green>Successfully reloaded the config!"));
-                        if(plugin.getConfig().getBoolean("enable-sentry")) return; // already enabled
+                        if(plugin.getMainConfig().getBoolean("enable-sentry")) return; // already enabled
                         if (invocation.source() != null && !(invocation.source() instanceof ConsoleCommandSource)) {
                             invocation.source().sendMessage(
                                     mm.deserialize("<gray>Optional Sentry Opt-In: Click <blue>here</blue> to enable anonymous error-reporting via Sentry (you can change this later in the config).")
@@ -55,7 +55,7 @@ public class MCMCommand implements SimpleCommand {
                 });
                 return;
             } else if (invocation.arguments()[0].equalsIgnoreCase("enablesentry")) {
-                plugin.getConfig().set("enable-sentry", true);
+                plugin.getMainConfig().set("enable-sentry", true);
                 invocation.source().sendMessage(mm.deserialize("<green>Successfully enabled Sentry!"));
                 return;
             } else if (invocation.arguments()[0].equalsIgnoreCase("setup")) {
@@ -76,8 +76,8 @@ public class MCMCommand implements SimpleCommand {
                 }
 
                 // set config key "uid" to uid, and "server_id" to serverId, and "setup-complete" to true
-                plugin.getConfig().set("uid", uid);
-                plugin.getConfig().set("server_id", serverId);
+                plugin.getMainConfig().set("uid", uid);
+                plugin.getMainConfig().set("server_id", serverId);
                 plugin.getDataConfig().set("setup-complete", true);
                 reloadConfigAndFetchData();
                 invocation.source().sendMessage(mm.deserialize("<green>Successfully configured the plugin!"));

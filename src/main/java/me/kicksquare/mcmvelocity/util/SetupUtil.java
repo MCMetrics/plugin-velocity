@@ -2,14 +2,13 @@ package me.kicksquare.mcmvelocity.util;
 
 import de.leonhard.storage.Config;
 import me.kicksquare.mcmvelocity.MCMVelocity;
-import ninja.leaping.configurate.ConfigurationNode;
 
 public class SetupUtil {
 
     private static MCMVelocity plugin = MCMVelocity.getPlugin();
 
     public static boolean isSetup() {
-        Config config = plugin.getConfig();
+        Config config = plugin.getMainConfig();
         Config dataConfig = plugin.getDataConfig();
 
         return dataConfig.getBoolean("setup-complete") &&
@@ -17,7 +16,7 @@ public class SetupUtil {
     }
 
     public static boolean shouldRecordPings() {
-        Config config = plugin.getConfig();
+        Config config = plugin.getMainConfig();
         Config dataConfig = plugin.getDataConfig();
         return isSetup() && dataConfig.getBoolean("record-pings");
     }

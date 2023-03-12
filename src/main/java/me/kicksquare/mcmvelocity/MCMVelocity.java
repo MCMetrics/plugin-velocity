@@ -35,7 +35,7 @@ public class MCMVelocity {
     private final Logger logger;
     private final Path dataDirectory;
     private final Metrics.Factory metricsFactory; // bstats
-    private Config config;
+    private Config mainConfig;
     private Config dataConfig;
 
     @Inject
@@ -59,7 +59,7 @@ public class MCMVelocity {
         logger.info("MCM-Velocity is starting.");
 
         // setup config
-        config = SimplixBuilder
+        mainConfig = SimplixBuilder
                 .fromFile(new File(dataDirectory.toFile(), "config.yml"))
                 .addInputStreamFromResource("config.yml")
                 .setDataType(DataType.SORTED)
@@ -87,12 +87,12 @@ public class MCMVelocity {
         commandManager.register(mcmMeta, mcmCommand);
 
         // enable bstats
-        if (getConfig().getBoolean("enable-bstats")) {
+        if (mainConfig.getBoolean("enable-bstats")) {
             metricsFactory.make(this, 17871);
         }
 
         // enable sentry error reporting
-        if (getConfig().getBoolean("enable-sentry")) {
+        if (mainConfig.getBoolean("enable-sentry")) {
             Sentry.init(options -> {
                 options.setDsn("https://fec1aed58a6f49a19804a5cc71d1a9cb@o4504532201046017.ingest.sentry.io/4504788999077888");
                 options.setTracesSampleRate(0.1);
@@ -106,6 +106,7 @@ public class MCMVelocity {
         // insert pings every 5 mins
         server.getScheduler().buildTask(this, () -> {
                     if (!SetupUtil.shouldRecordPings()) return;
+                    if(dataConfig.getInt("ping-interval") == 0) return;
 
                     try {
                         System.out.println("uploading player count");
@@ -115,15 +116,15 @@ public class MCMVelocity {
                         e.printStackTrace();
                     }
                 })
-                .repeat(Duration.ofMinutes(5))
+                .repeat(Duration.ofMinutes(dataConfig.getInt("ping-interval")))
                 .schedule();
     }
 
     public Logger getLogger() {
         return logger;
     }
-    public Config getConfig() {
-        return config;
+    public Config getMainConfig() {
+        return mainConfig;
     }
     public Config getDataConfig() {
         return dataConfig;

@@ -13,14 +13,17 @@ public class TaskList {
     public boolean recordSessions;
     @JsonProperty("recordPings")
     public boolean recordPings;
+    @JsonProperty("pingInterval")
+    public boolean pingInterval;
     @JsonProperty("recordPayments")
     public boolean recordPayments;
     @JsonProperty("executeExperiments")
     public boolean executeExperiments;
 
-    public TaskList(@JsonProperty("recordSessions") boolean recordSessions, @JsonProperty("recordPings") boolean recordPings, @JsonProperty("recordPayments") boolean recordPayments, @JsonProperty("executeExperiments") boolean executeExperiments) {
+    public TaskList(@JsonProperty("recordSessions") boolean recordSessions, @JsonProperty("recordPings") boolean recordPings, @JsonProperty("pingInterval") boolean pingInterval, @JsonProperty("recordPayments") boolean recordPayments, @JsonProperty("executeExperiments") boolean executeExperiments) {
         this.recordSessions = recordSessions;
         this.recordPings = recordPings;
+        this.pingInterval = pingInterval;
         this.recordPayments = recordPayments;
         this.executeExperiments = executeExperiments;
     }
@@ -39,6 +42,7 @@ public class TaskList {
 
                     TaskList tasks = mapper.readValue(response, TaskList.class);
                     plugin.getDataConfig().set("record-pings", tasks.recordPings);
+                    plugin.getDataConfig().set("ping-interval", tasks.pingInterval);
                 } catch (JsonProcessingException exception) {
                     exception.printStackTrace();
                 }
