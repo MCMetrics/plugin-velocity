@@ -14,13 +14,13 @@ public class TaskList {
     @JsonProperty("recordPings")
     public boolean recordPings;
     @JsonProperty("pingInterval")
-    public boolean pingInterval;
+    public int pingInterval;
     @JsonProperty("recordPayments")
     public boolean recordPayments;
     @JsonProperty("executeExperiments")
     public boolean executeExperiments;
 
-    public TaskList(@JsonProperty("recordSessions") boolean recordSessions, @JsonProperty("recordPings") boolean recordPings, @JsonProperty("pingInterval") boolean pingInterval, @JsonProperty("recordPayments") boolean recordPayments, @JsonProperty("executeExperiments") boolean executeExperiments) {
+    public TaskList(@JsonProperty("recordSessions") boolean recordSessions, @JsonProperty("recordPings") boolean recordPings, @JsonProperty("pingInterval") int pingInterval, @JsonProperty("recordPayments") boolean recordPayments, @JsonProperty("executeExperiments") boolean executeExperiments) {
         this.recordSessions = recordSessions;
         this.recordPings = recordPings;
         this.pingInterval = pingInterval;
