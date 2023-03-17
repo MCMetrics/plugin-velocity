@@ -4,6 +4,7 @@ import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import me.kicksquare.mcmvelocity.MCMVelocity;
 import me.kicksquare.mcmvelocity.types.TaskList;
+import me.kicksquare.mcmvelocity.util.HttpUtil;
 import me.kicksquare.mcmvelocity.util.SetupUtil;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
@@ -41,6 +42,7 @@ public class MCMCommand implements SimpleCommand {
                     if (result) {
                         invocation.source().sendMessage(mm.deserialize("<green>Successfully reloaded the config!"));
                         if(plugin.getMainConfig().getBoolean("enable-sentry")) return; // already enabled
+
                         if (invocation.source() != null && !(invocation.source() instanceof ConsoleCommandSource)) {
                             invocation.source().sendMessage(
                                     mm.deserialize("<gray>Optional Sentry Opt-In: Click <blue>here</blue> to enable anonymous error-reporting via Sentry (you can change this later in the config).")
@@ -80,6 +82,10 @@ public class MCMCommand implements SimpleCommand {
                 plugin.getMainConfig().set("server_id", serverId);
                 plugin.getDataConfig().set("setup-complete", true);
                 reloadConfigAndFetchData();
+
+                // set server connected to true
+                HttpUtil.makeAsyncGetRequest("https://dashboard.mcmetrics.net/api/server/setServerIsSetup", HttpUtil.getAuthHeadersFromConfig());
+
                 invocation.source().sendMessage(mm.deserialize("<green>Successfully configured the plugin!"));
                 return;
             }
