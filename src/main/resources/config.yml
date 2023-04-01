@@ -13,3 +13,6 @@ enable-bstats: true
 # Should the plugin send anonymous error reports to Sentry? This helps us track and fix plugin errors.
 # This option needs a restart to take effect.
 enable-sentry: false
+
+# Sends additional debug information to the console.
+debug: false

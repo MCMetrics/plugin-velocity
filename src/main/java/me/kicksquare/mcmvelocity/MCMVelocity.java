@@ -15,6 +15,7 @@ import de.leonhard.storage.internal.settings.ReloadSettings;
 import io.sentry.Sentry;
 import me.kicksquare.mcmvelocity.commands.MCMCommand;
 import me.kicksquare.mcmvelocity.util.HttpUtil;
+import me.kicksquare.mcmvelocity.util.LoggerUtil;
 import me.kicksquare.mcmvelocity.util.Metrics;
 import me.kicksquare.mcmvelocity.util.SetupUtil;
 import org.slf4j.Logger;
@@ -109,7 +110,7 @@ public class MCMVelocity {
                     if(dataConfig.getInt("ping-interval") == 0) return;
 
                     try {
-                        System.out.println("uploading player count");
+                        LoggerUtil.debug("Sending playercount ping");
                         final String bodyString = "{\"playercount\": \"" + server.getPlayerCount() + "\"}";
                         HttpUtil.makeAsyncPostRequest("https://dashboard.mcmetrics.net/api/pings/insertPing", bodyString, HttpUtil.getAuthHeadersFromConfig());
                     } catch (Exception e) {
