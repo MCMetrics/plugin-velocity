@@ -14,6 +14,7 @@ import de.leonhard.storage.internal.settings.DataType;
 import de.leonhard.storage.internal.settings.ReloadSettings;
 import io.sentry.Sentry;
 import me.kicksquare.mcmvelocity.commands.MCMCommand;
+import me.kicksquare.mcmvelocity.commands.PaymentCommand;
 import me.kicksquare.mcmvelocity.util.HttpUtil;
 import me.kicksquare.mcmvelocity.util.LoggerUtil;
 import me.kicksquare.mcmvelocity.util.Metrics;
@@ -79,13 +80,17 @@ public class MCMVelocity {
 
         // register commands
         CommandManager commandManager = server.getCommandManager();
-        CommandMeta mcmMeta = commandManager.metaBuilder("mcmetrics")
-                // This will create a new alias for the command "/test"
-                // with the same arguments and functionality
+
+        CommandMeta mainCommandMeta = commandManager.metaBuilder("mcmetrics")
                 .aliases("mcm", "mcmetricsvelocity", "mcmv", "/mcm", "/mcmetrics")
                 .build();
         MCMCommand mcmCommand = new MCMCommand(this);
-        commandManager.register(mcmMeta, mcmCommand);
+        commandManager.register(mainCommandMeta, mcmCommand);
+
+        CommandMeta paymentCommandMeta = commandManager.metaBuilder("mcmpayment")
+                .build();
+        PaymentCommand paymentCommand = new PaymentCommand(this);
+        commandManager.register(paymentCommandMeta, paymentCommand);
 
         // enable bstats
         if (mainConfig.getBoolean("enable-bstats")) {
