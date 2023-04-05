@@ -62,7 +62,7 @@ public class PaymentCommand implements SimpleCommand {
 
         LoggerUtil.debug("Uploading payment session now... " + jsonString);
 
-        HttpUtil.makeAsyncPostRequest("api/payments/insertPayment", jsonString, HttpUtil.getAuthHeadersFromConfig());
+        HttpUtil.makeAsyncPostRequest("https://dashboard.mcmetrics.net/api/payments/insertPayment", jsonString, HttpUtil.getAuthHeadersFromConfig());
     }
 
     @Override
