@@ -36,12 +36,20 @@ public class PaymentCommand implements SimpleCommand {
             return;
         }
 
-        String platform = invocation.arguments()[0];
-        String player_uuid = invocation.arguments()[1];
-        String transaction_id = invocation.arguments()[2];
+        final String platform = invocation.arguments()[0];
+        final String player_uuid = invocation.arguments()[1];
+        final String transaction_id = invocation.arguments()[2];
         String amount = invocation.arguments()[3];
-        String currency = invocation.arguments()[4];
-        String package_id = invocation.arguments()[5];
+        final String currency = invocation.arguments()[4];
+        final String package_id = invocation.arguments()[5];
+
+        // transaction fee option from config
+        double amountDouble = Double.parseDouble(amount);
+        final double paymentFeeOption = plugin.getMainConfig().getDouble("payment-fee");
+        if (paymentFeeOption > 0) {
+            amountDouble = amountDouble * (1 - paymentFeeOption);
+            amount = String.valueOf(amountDouble);
+        }
 
         // make sure platform is either tebex or craftingstore
         if (!platform.equalsIgnoreCase("tebex") && !platform.equalsIgnoreCase("craftingstore")) {

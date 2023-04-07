@@ -14,5 +14,10 @@ enable-bstats: true
 # This option needs a restart to take effect.
 enable-sentry: false
 
+# Automatically subtracts a percentage from payment amounts to account for Tebex & transaction fees.
+# For example, setting this to 0.05 will subtract 5% from all payments.
+# Set to 0.0 to disable.
+payment-fee: 0.00
+
 # Sends additional debug information to the console.
 debug: false
