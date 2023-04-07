@@ -9,7 +9,7 @@
     <version>1.0.1</version>
     <packaging>jar</packaging>
 
-    <name>MCM-Velocity-Plugin</name>
+    <name>MCM-Velocity</name>
 
     <properties>
         <java.version>11</java.version>
