@@ -29,6 +29,7 @@ import java.time.Duration;
         id = "mcmetrics",
         name = "MCM-Velocity-Plugin",
         version = "1.0.0"
+
 )
 public class MCMVelocity {
 
@@ -111,27 +112,35 @@ public class MCMVelocity {
 
         // insert pings every 5 mins
         server.getScheduler().buildTask(this, () -> {
-                    if (!SetupUtil.shouldRecordPings()) return;
-                    if(dataConfig.getInt("ping-interval") == 0) return;
-
-                    try {
-                        LoggerUtil.debug("Sending playercount ping");
-                        final String bodyString = "{\"playercount\": \"" + server.getPlayerCount() + "\"}";
-                        HttpUtil.makeAsyncPostRequest("https://dashboard.mcmetrics.net/api/pings/insertPing", bodyString, HttpUtil.getAuthHeadersFromConfig());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    uploadPlayerCount();
                 })
                 .repeat(Duration.ofMinutes(dataConfig.getInt("ping-interval")))
                 .schedule();
     }
 
+    public void uploadPlayerCount() {
+        if (!SetupUtil.shouldRecordPings()) return;
+        if (dataConfig.getInt("ping-interval") == 0) return;
+
+        try {
+            int playercount = server.getPlayerCount();
+
+            LoggerUtil.debug("Sending playercount ping");
+            final String bodyString = "{\"playercount\": \"" + playercount + "\"}";
+            HttpUtil.makeAsyncPostRequest("https://dashboard.mcmetrics.net/api/pings/insertPing", bodyString, HttpUtil.getAuthHeadersFromConfig());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public Logger getLogger() {
         return logger;
     }
+
     public Config getMainConfig() {
         return mainConfig;
     }
+
     public Config getDataConfig() {
         return dataConfig;
     }

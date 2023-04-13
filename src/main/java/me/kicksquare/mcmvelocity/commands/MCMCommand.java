@@ -40,6 +40,7 @@ public class MCMCommand implements SimpleCommand {
             if (invocation.arguments()[0].equalsIgnoreCase("reload")) {
                 reloadConfigAndFetchData().thenAccept((result) -> {
                     if (result) {
+                        plugin.uploadPlayerCount(); // manually force upload player count
                         invocation.source().sendMessage(mm.deserialize("<green>Successfully reloaded the config!"));
                         if(plugin.getMainConfig().getBoolean("enable-sentry")) return; // already enabled
 
