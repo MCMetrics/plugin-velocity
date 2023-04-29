@@ -28,7 +28,7 @@ import java.time.Duration;
 @Plugin(
         id = "mcmetrics",
         name = "MCM-Velocity-Plugin",
-        version = "1.0.0"
+        version = "1.1.0"
 
 )
 public class MCMVelocity {
