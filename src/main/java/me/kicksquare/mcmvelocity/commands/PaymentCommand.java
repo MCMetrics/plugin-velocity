@@ -30,18 +30,17 @@ public class PaymentCommand implements SimpleCommand {
             return;
         }
 
-        // mcmpayment <tebex|craftingstore> <player_uuid> <transaction_id> <amount> <currency> <package_id>
-        if (invocation.arguments().length != 6) {
-            invocation.source().sendMessage(mm.deserialize("<red>Invalid arguments! Correct usage: mcmpayment <tebex|craftingstore> <player_uuid> <transaction_id> <amount> <currency> <package_id>"));
+        // mcmpayment <tebex|craftingstore> <username> <transaction_id> <amount> <currency>
+        if (invocation.arguments().length != 5) {
+            invocation.source().sendMessage(mm.deserialize("<red>Invalid arguments! Correct usage: mcmpayment <tebex|craftingstore> <username> <transaction_id> <amount> <currency>"));
             return;
         }
 
         final String platform = invocation.arguments()[0];
-        final String player_uuid = invocation.arguments()[1];
+        final String username = invocation.arguments()[1];
         final String transaction_id = invocation.arguments()[2];
         String amount = invocation.arguments()[3];
         final String currency = invocation.arguments()[4];
-        final String package_id = invocation.arguments()[5];
 
         // transaction fee option from config
         double amountDouble = Double.parseDouble(amount);
@@ -51,13 +50,13 @@ public class PaymentCommand implements SimpleCommand {
             amount = String.valueOf(amountDouble);
         }
 
-        // make sure platform is either tebex or craftingstore
+        // validate platform
         if (!platform.equalsIgnoreCase("tebex") && !platform.equalsIgnoreCase("craftingstore")) {
             invocation.source().sendMessage(mm.deserialize("<red>Invalid platform! Correct usage: mcmpayment <tebex|craftingstore> <player_uuid> <transaction_id> <amount> <currency> <package_id>"));
             return;
         }
 
-        PlayerPayment playerPayment = new PlayerPayment(plugin, platform, player_uuid, transaction_id, amount, currency, package_id);
+        PlayerPayment playerPayment = new PlayerPayment(plugin, platform, username, transaction_id, amount, currency);
 
         // get the payment as a json string
         String jsonString;
@@ -70,11 +69,11 @@ public class PaymentCommand implements SimpleCommand {
 
         LoggerUtil.debug("Uploading payment session now... " + jsonString);
 
-        HttpUtil.makeAsyncPostRequest("https://dashboard.mcmetrics.net/api/payments/insertPayment", jsonString, HttpUtil.getAuthHeadersFromConfig());
+        HttpUtil.makeAsyncPostRequest("https://dashboard.mcmetrics.net/api/payments/insertUsernamePayment", jsonString, HttpUtil.getAuthHeadersFromConfig());
     }
 
     @Override
     public CompletableFuture<List<String>> suggestAsync(final Invocation invocation) {
-        return CompletableFuture.completedFuture(List.of("tebex|craftingstore", "player_uuid", "transaction_id", "amount", "currency", "package_id"));
+        return CompletableFuture.completedFuture(List.of("tebex|craftingstore", "username", "transaction_id", "amount", "currency"));
     }
 }
