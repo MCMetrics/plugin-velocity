@@ -20,13 +20,21 @@ public class TaskList {
     public boolean recordPayments;
     @JsonProperty("executeExperiments")
     public boolean executeExperiments;
+    @JsonProperty("globalBans")
+    public boolean globalBans;
 
-    public TaskList(@JsonProperty("recordSessions") boolean recordSessions, @JsonProperty("recordPings") boolean recordPings, @JsonProperty("pingInterval") int pingInterval, @JsonProperty("recordPayments") boolean recordPayments, @JsonProperty("executeExperiments") boolean executeExperiments) {
+    public TaskList(@JsonProperty("recordSessions") boolean recordSessions,
+                    @JsonProperty("recordPings") boolean recordPings,
+                    @JsonProperty("pingInterval") int pingInterval,
+                    @JsonProperty("recordPayments") boolean recordPayments,
+                    @JsonProperty("executeExperiments") boolean executeExperiments,
+                    @JsonProperty("globalBans") boolean globalBans) {
         this.recordSessions = recordSessions;
         this.recordPings = recordPings;
         this.pingInterval = pingInterval;
         this.recordPayments = recordPayments;
         this.executeExperiments = executeExperiments;
+        this.globalBans = globalBans;
     }
 
     public static void fetchTasks() {
@@ -44,6 +52,7 @@ public class TaskList {
                     TaskList tasks = mapper.readValue(response, TaskList.class);
                     plugin.getDataConfig().set("record-pings", tasks.recordPings);
                     plugin.getDataConfig().set("ping-interval", tasks.pingInterval);
+                    plugin.getDataConfig().set("global-bans", tasks.globalBans);
                 } catch (JsonProcessingException exception) {
                     if (plugin.getMainConfig().getBoolean("debug")) {
                         LoggerUtil.severe("Error occurred while fetching task list: " + exception.getMessage());
