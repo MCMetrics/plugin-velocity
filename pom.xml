@@ -241,12 +241,5 @@
             <version>3.3.0</version>
         </dependency>
 
-        <!-- apache commons text - string substitutor -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>1.10.0</version>
-        </dependency>
-
     </dependencies>
 </project>
