@@ -15,6 +15,7 @@ import de.leonhard.storage.internal.settings.ReloadSettings;
 import io.sentry.Sentry;
 import me.kicksquare.mcmvelocity.commands.MCMCommand;
 import me.kicksquare.mcmvelocity.commands.PaymentCommand;
+import me.kicksquare.mcmvelocity.listeners.GlobalBansListener;
 import me.kicksquare.mcmvelocity.util.HttpUtil;
 import me.kicksquare.mcmvelocity.util.LoggerUtil;
 import me.kicksquare.mcmvelocity.util.Metrics;
@@ -40,6 +41,7 @@ public class MCMVelocity {
     private final Metrics.Factory metricsFactory; // bstats
     private Config mainConfig;
     private Config dataConfig;
+    private Config bansConfig;
 
     @Inject
     public MCMVelocity(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory, Metrics.Factory metricsFactory) {
@@ -61,7 +63,7 @@ public class MCMVelocity {
 
         logger.info("MCM-Velocity is starting.");
 
-        // setup config
+        // setup config files
         mainConfig = SimplixBuilder
                 .fromFile(new File(dataDirectory.toFile(), "config.yml"))
                 .addInputStreamFromResource("config.yml")
@@ -72,6 +74,13 @@ public class MCMVelocity {
         dataConfig = SimplixBuilder
                 .fromFile(new File(dataDirectory.toFile(), "data/data.yml"))
                 .addInputStreamFromResource("data.yml")
+                .setDataType(DataType.SORTED)
+                .setReloadSettings(ReloadSettings.MANUALLY)
+                .createConfig();
+
+        bansConfig = SimplixBuilder
+                .fromFile(new File(dataDirectory.toFile(), "globalbans.yml"))
+                .addInputStreamFromResource("globalbans.yml")
                 .setDataType(DataType.SORTED)
                 .setReloadSettings(ReloadSettings.MANUALLY)
                 .createConfig();
@@ -93,6 +102,9 @@ public class MCMVelocity {
         PaymentCommand paymentCommand = new PaymentCommand(this);
         commandManager.register(paymentCommandMeta, paymentCommand);
 
+        // enable join listener for global bans
+        server.getEventManager().register(this, new GlobalBansListener(this, server));
+
         // enable bstats
         if (mainConfig.getBoolean("enable-bstats")) {
             metricsFactory.make(this, 17871);
@@ -111,9 +123,7 @@ public class MCMVelocity {
         }
 
         // insert pings every 5 mins
-        server.getScheduler().buildTask(this, () -> {
-                    uploadPlayerCount();
-                })
+        server.getScheduler().buildTask(this, this::uploadPlayerCount)
                 .repeat(Duration.ofMinutes(dataConfig.getInt("ping-interval")))
                 .schedule();
     }
@@ -143,5 +153,13 @@ public class MCMVelocity {
 
     public Config getDataConfig() {
         return dataConfig;
+    }
+
+    public Config getBansConfig() {
+        return bansConfig;
+    }
+
+    public ProxyServer getServer() {
+        return server;
     }
 }

@@ -23,6 +23,8 @@ public class MCMCommand implements SimpleCommand {
     public static CompletableFuture<Boolean> reloadConfigAndFetchData() {
         return CompletableFuture.supplyAsync(() -> {
             staticPlugin.getMainConfig().forceReload();
+            staticPlugin.getDataConfig().forceReload();
+            staticPlugin.getBansConfig().forceReload();
 
             if (SetupUtil.isSetup()) {
                 TaskList.fetchTasks();

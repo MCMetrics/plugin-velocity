@@ -3,3 +3,4 @@
 #
 setup-complete: false
 record-pings: false
+global-bans: false

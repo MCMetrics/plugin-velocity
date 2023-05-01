@@ -225,5 +225,28 @@
             <artifactId>simplixstorage</artifactId>
             <version>3.2.5</version>
         </dependency>
+
+        <!--        discord webhooks (global bans)-->
+        <dependency>
+            <groupId>club.minnced</groupId>
+            <artifactId>discord-webhooks</artifactId>
+            <version>0.8.2</version>
+        </dependency>
+
+        <!--   io library (needed for discord webhooks)     -->
+        <!-- https://mvnrepository.com/artifact/com.squareup.okio/okio -->
+        <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
+        <!-- apache commons text - string substitutor -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.10.0</version>
+        </dependency>
+
     </dependencies>
 </project>
