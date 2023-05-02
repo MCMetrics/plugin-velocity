@@ -12,7 +12,6 @@ import de.leonhard.storage.Config;
 import de.leonhard.storage.SimplixBuilder;
 import de.leonhard.storage.internal.settings.DataType;
 import de.leonhard.storage.internal.settings.ReloadSettings;
-import io.sentry.Sentry;
 import me.kicksquare.mcmvelocity.commands.MCMCommand;
 import me.kicksquare.mcmvelocity.commands.PaymentCommand;
 import me.kicksquare.mcmvelocity.listeners.GlobalBansListener;
@@ -29,7 +28,7 @@ import java.time.Duration;
 @Plugin(
         id = "mcmetrics",
         name = "MCM-Velocity-Plugin",
-        version = "1.2.1"
+        version = "1.2.2"
 
 )
 public class MCMVelocity {
@@ -108,18 +107,6 @@ public class MCMVelocity {
         // enable bstats
         if (mainConfig.getBoolean("enable-bstats")) {
             metricsFactory.make(this, 17871);
-        }
-
-        // enable sentry error reporting
-        if (mainConfig.getBoolean("enable-sentry")) {
-            Sentry.init(options -> {
-                options.setDsn("https://fec1aed58a6f49a19804a5cc71d1a9cb@o4504532201046017.ingest.sentry.io/4504788999077888");
-                options.setTracesSampleRate(0.1);
-                options.setDebug(false);
-            });
-
-            // checks for exceptions matching this plugin name and uploads them to sentry
-            Thread.setDefaultUncaughtExceptionHandler(new SentryExceptionHandler());
         }
 
         // insert pings every 5 mins

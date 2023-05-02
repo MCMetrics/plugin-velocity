@@ -46,24 +46,10 @@ public class MCMCommand implements SimpleCommand {
                     if (result) {
                         plugin.uploadPlayerCount(); // manually force upload player count
                         invocation.source().sendMessage(mm.deserialize("<green>Successfully reloaded the config!"));
-                        if(plugin.getMainConfig().getBoolean("enable-sentry")) return; // already enabled
-
-                        if (invocation.source() != null && !(invocation.source() instanceof ConsoleCommandSource)) {
-                            invocation.source().sendMessage(
-                                    mm.deserialize("<gray>Optional Sentry Opt-In: Click <blue>here</blue> to enable anonymous error-reporting via Sentry (you can change this later in the config).")
-                                            .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/mcmetrics enablesentry")));
-                        } else {
-                            invocation.source().sendMessage(mm.deserialize("<gray>Optional Sentry Opt-In: Run <blue>'mcmetrics enablesentry'</blue> to enable anonymous error-reporting via Sentry (you can change this later in the config)."));
-                        }
-
                     } else {
                         invocation.source().sendMessage(mm.deserialize("<red>Failed to reload the config!"));
                     }
                 });
-                return;
-            } else if (invocation.arguments()[0].equalsIgnoreCase("enablesentry")) {
-                plugin.getMainConfig().set("enable-sentry", true);
-                invocation.source().sendMessage(mm.deserialize("<green>Successfully enabled Sentry!"));
                 return;
             } else if (invocation.arguments()[0].equalsIgnoreCase("setup")) {
                 invocation.source().sendMessage(mm.deserialize("<red>Usage: /mcmetrics setup <user id> <server id>"));

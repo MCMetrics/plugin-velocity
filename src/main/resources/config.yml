@@ -10,10 +10,6 @@ uid: ""
 # This option needs a restart to take effect.
 enable-bstats: true
 
-# Should the plugin send anonymous error reports to Sentry? This helps us track and fix plugin errors.
-# This option needs a restart to take effect.
-enable-sentry: false
-
 # Automatically subtracts a percentage from payment amounts to account for Tebex & transaction fees.
 # For example, setting this to 0.05 will subtract 5% from all payments.
 # Set to 0.0 to disable.
