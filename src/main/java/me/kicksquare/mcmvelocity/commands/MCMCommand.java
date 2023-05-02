@@ -11,6 +11,8 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import static me.kicksquare.mcmvelocity.commands.BansExecutor.executeBansSubcommand;
+
 public class MCMCommand implements SimpleCommand {
     private static MCMVelocity staticPlugin = MCMVelocity.getPlugin();
     MiniMessage mm = MiniMessage.miniMessage();
@@ -66,6 +68,9 @@ public class MCMCommand implements SimpleCommand {
             } else if (invocation.arguments()[0].equalsIgnoreCase("setup")) {
                 invocation.source().sendMessage(mm.deserialize("<red>Usage: /mcmetrics setup <user id> <server id>"));
                 return;
+            } else if (invocation.arguments()[0].equalsIgnoreCase("bans")) {
+                invocation.source().sendMessage(mm.deserialize("<red>Usage: /mcmetrics bans <add/lookup>"));
+                return;
             }
         } else if (invocation.arguments().length == 3) {
             if (invocation.arguments()[0].equalsIgnoreCase("setup")) {
@@ -92,12 +97,24 @@ public class MCMCommand implements SimpleCommand {
                 invocation.source().sendMessage(mm.deserialize("<green>Successfully configured the plugin!"));
                 return;
             }
+        } else if (invocation.arguments().length > 1 && invocation.arguments()[0].equalsIgnoreCase("bans")) {
+            if (!plugin.getBansConfig().getBoolean("enabled")) {
+                invocation.source().sendMessage(mm.deserialize("<red>Global Bans is not enabled!"));
+                return;
+            }
+
+            if (executeBansSubcommand(invocation.source(), invocation.arguments())) return;
         }
 
         invocation.source().sendMessage(mm.deserialize("<yellow><bold>MCMetrics</bold>"));
         invocation.source().sendMessage(mm.deserialize("<gray>Plugin Commands:"));
         invocation.source().sendMessage(mm.deserialize("<gray> • <blue>/mcmetrics reload</blue> - Reloads the config"));
         invocation.source().sendMessage(mm.deserialize("<gray> • <blue>/mcmetrics setup <user id> <server id></blue> - Automatically configures the plugin"));
+        if (plugin.getBansConfig().getBoolean("enabled")) {
+            invocation.source().sendMessage(mm.deserialize("<gray>Global Bans Commands:"));
+            invocation.source().sendMessage(mm.deserialize("<gray> • <blue>/mcmetrics bans add <player name/uuid> <reason> <evidence></blue> - Bans a player using MCMetrics Global Bans"));
+            invocation.source().sendMessage(mm.deserialize("<gray> • <blue>/mcmetrics bans lookup <player name/uuid></blue> - Check a player for MCMetrics Global Bans flags"));
+        }
     }
 
     @Override
@@ -107,6 +124,39 @@ public class MCMCommand implements SimpleCommand {
 
     @Override
     public CompletableFuture<List<String>> suggestAsync(final Invocation invocation) {
-        return CompletableFuture.completedFuture(List.of("reload"));
+        // todo better solution instead of nested ifs
+        if (invocation.arguments().length == 1) {
+            return CompletableFuture.completedFuture(List.of("reload", "setup", "bans"));
+        } else if (invocation.arguments().length == 2) {
+            if (invocation.arguments()[0].equalsIgnoreCase("bans")) {
+                return CompletableFuture.completedFuture(List.of("add", "lookup"));
+            } else if (invocation.arguments()[0].equalsIgnoreCase("setup")) {
+                return CompletableFuture.completedFuture(List.of("<user id>"));
+            }
+        } else if (invocation.arguments().length == 3) {
+            if (invocation.arguments()[0].equalsIgnoreCase("setup")) {
+                return CompletableFuture.completedFuture(List.of("<server id>"));
+            } else if (invocation.arguments()[0].equalsIgnoreCase("bans")) {
+                if (invocation.arguments()[1].equalsIgnoreCase("add")) {
+                    return CompletableFuture.completedFuture(List.of("<player name/uuid>"));
+                } else if (invocation.arguments()[1].equalsIgnoreCase("lookup")) {
+                    return CompletableFuture.completedFuture(List.of("<player name/uuid>"));
+                }
+            }
+        } else if (invocation.arguments().length == 4) {
+            if (invocation.arguments()[0].equalsIgnoreCase("bans")) {
+                if (invocation.arguments()[1].equalsIgnoreCase("add")) {
+                    return CompletableFuture.completedFuture(List.of("<reason>"));
+                }
+            }
+        } else if (invocation.arguments().length == 5) {
+            if (invocation.arguments()[0].equalsIgnoreCase("bans")) {
+                if (invocation.arguments()[1].equalsIgnoreCase("add")) {
+                    return CompletableFuture.completedFuture(List.of("<evidence>"));
+                }
+            }
+        }
+
+        return CompletableFuture.completedFuture(List.of());
     }
 }
