@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.kicksquare</groupId>
-    <artifactId>mcm-velocity</artifactId>
+    <artifactId>MCMetrics-Velocity</artifactId>
     <version>1.2.2</version>
     <packaging>jar</packaging>
 

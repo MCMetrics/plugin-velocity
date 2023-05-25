@@ -4,6 +4,7 @@ import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import me.kicksquare.mcmvelocity.MCMVelocity;
 import me.kicksquare.mcmvelocity.types.TaskList;
+import me.kicksquare.mcmvelocity.util.ConfigUtil;
 import me.kicksquare.mcmvelocity.util.HttpUtil;
 import me.kicksquare.mcmvelocity.util.SetupUtil;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -24,6 +25,8 @@ public class MCMCommand implements SimpleCommand {
 
     public static CompletableFuture<Boolean> reloadConfigAndFetchData() {
         return CompletableFuture.supplyAsync(() -> {
+            ConfigUtil.setConfigDefaults(staticPlugin.getMainConfig(), staticPlugin.getDataConfig(), staticPlugin.getBansConfig());
+
             staticPlugin.getMainConfig().forceReload();
             staticPlugin.getDataConfig().forceReload();
             staticPlugin.getBansConfig().forceReload();
