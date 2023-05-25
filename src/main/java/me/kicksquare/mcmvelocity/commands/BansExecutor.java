@@ -14,7 +14,7 @@ import java.util.Date;
 
 public class BansExecutor {
     private static final MCMVelocity plugin = MCMVelocity.getPlugin();
-    static MiniMessage mm = MiniMessage.miniMessage();
+    static final MiniMessage mm = MiniMessage.miniMessage();
 
     // returns false if the help message should be shown
     public static boolean executeBansSubcommand(CommandSource sender, String[] args) {

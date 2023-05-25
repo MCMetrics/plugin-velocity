@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 public class HttpUtil {
 
     private static final OkHttpClient client = new OkHttpClient();
-    private static MCMVelocity plugin = MCMVelocity.getPlugin();
+    private static final MCMVelocity plugin = MCMVelocity.getPlugin();
 
     /**
      * @param url        The URL to send the request to

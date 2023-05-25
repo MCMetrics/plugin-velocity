@@ -5,10 +5,10 @@ import me.kicksquare.mcmvelocity.MCMVelocity;
 
 public class SetupUtil {
 
-    private static MCMVelocity plugin = MCMVelocity.getPlugin();
-    private static Config config = plugin.getMainConfig();
-    private static Config dataConfig = plugin.getDataConfig();
-    private static Config bansConfig = plugin.getBansConfig();
+    private static final MCMVelocity plugin = MCMVelocity.getPlugin();
+    private static final Config config = plugin.getMainConfig();
+    private static final Config dataConfig = plugin.getDataConfig();
+    private static final Config bansConfig = plugin.getBansConfig();
 
     public static boolean isSetup() {
 

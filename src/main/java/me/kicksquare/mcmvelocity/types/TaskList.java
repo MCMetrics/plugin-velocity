@@ -8,7 +8,7 @@ import me.kicksquare.mcmvelocity.util.HttpUtil;
 import me.kicksquare.mcmvelocity.util.LoggerUtil;
 
 public class TaskList {
-    private static MCMVelocity plugin = MCMVelocity.getPlugin();
+    private static final MCMVelocity plugin = MCMVelocity.getPlugin();
 
     @JsonProperty("recordSessions")
     public boolean recordSessions;

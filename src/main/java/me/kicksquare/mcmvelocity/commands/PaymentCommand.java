@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class PaymentCommand implements SimpleCommand {
-    private static MCMVelocity staticPlugin = MCMVelocity.getPlugin();
-    MiniMessage mm = MiniMessage.miniMessage();
+    private static final MCMVelocity staticPlugin = MCMVelocity.getPlugin();
+    final MiniMessage mm = MiniMessage.miniMessage();
     private static final ObjectMapper mapper = new ObjectMapper();
-    private MCMVelocity plugin;
+    private final MCMVelocity plugin;
 
     public PaymentCommand(MCMVelocity plugin) {
         this.plugin = plugin;

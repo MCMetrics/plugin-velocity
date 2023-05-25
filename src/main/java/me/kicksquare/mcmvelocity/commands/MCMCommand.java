@@ -15,9 +15,9 @@ import java.util.concurrent.CompletableFuture;
 import static me.kicksquare.mcmvelocity.commands.BansExecutor.executeBansSubcommand;
 
 public class MCMCommand implements SimpleCommand {
-    private static MCMVelocity staticPlugin = MCMVelocity.getPlugin();
-    MiniMessage mm = MiniMessage.miniMessage();
-    private MCMVelocity plugin;
+    private static final MCMVelocity staticPlugin = MCMVelocity.getPlugin();
+    final MiniMessage mm = MiniMessage.miniMessage();
+    private final MCMVelocity plugin;
 
     public MCMCommand(MCMVelocity plugin) {
         this.plugin = plugin;
